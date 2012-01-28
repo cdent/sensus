@@ -1,0 +1,72 @@
+body {
+    background: #F0F4F8;
+    min-height: 100%;
+    font-family: "Helvetica Neue",helvetica,arial,sans-serif;
+    line-height: 1.4;
+}
+
+#main {
+    position: relative;
+    max-width: 50%;
+    min-height: 100%;
+    margin: 5em auto;
+    -webkit-perspective: 800;
+    -webkit-perspective-origin: 50% 7em; 
+}
+
+
+.tiddler {
+    position: absolute;
+    top: 0;
+    padding: 1em;
+    overflow: hidden;
+    background: #DCE7F1;
+    border-radius: .5em;
+    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.5);
+    max-height: 20em;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    -webkit-transform-style: preserve-3d;
+    -webkit-transition: -webkit-transform 1s, opacity 1s;
+}
+
+.tiddler > h1 {
+    font-size: 150%;
+}
+
+.tcontent h1 {
+    font-size: 125%;
+}
+
+.tcontent {
+    margin-top: 1em;
+}
+
+.tags li {
+    display: inline;
+    padding-right: 1em;
+}
+
+.farleft {
+    opacity: 0.5;
+    -webkit-transform: rotateY(-30deg) translate3d(-48em, 0, -6em);
+}
+.left {
+    opacity: 0.6;
+    -webkit-transform: rotateY(-15deg) translate3d(-16em, 0, -3em);
+}
+
+.center {
+    opacity: 0.9;
+    -webkit-transform: rotateY(0deg);
+}
+
+.right {
+    opacity: 0.6;
+    -webkit-transform: rotateY(15deg) translate3d(16em, 0, -3em);
+}
+
+.farright {
+    opacity: 0.5;
+    -webkit-transform: rotateY(30deg) translate3d(48em, 0, -6em);
+}
