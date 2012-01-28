@@ -5,6 +5,12 @@ body {
     line-height: 1.4;
 }
 
+pre {
+    white-space: pre;
+    font: 90% "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", "Courier New", monospace;
+}
+
+
 #main {
     position: relative;
     max-width: 50%;
@@ -24,10 +30,20 @@ body {
     border-radius: .5em;
     box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.5);
     max-height: 20em;
-    overflow-x: hidden;
+    max-width: 100%;
+    overflow-x: scroll;
     overflow-y: scroll;
     -webkit-transform-style: preserve-3d;
     -webkit-transition: -webkit-transform 1s, opacity 1s;
+}
+
+.tiddler a {
+    color: #BC4378;
+    text-decoration: none;
+}
+
+.tiddler img {
+    max-width: 100%;
 }
 
 .tiddler > h1 {
@@ -57,7 +73,7 @@ body {
 }
 
 .center {
-    opacity: 0.9;
+    opacity: 1.0;
     -webkit-transform: rotateY(0deg);
 }
 
