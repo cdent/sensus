@@ -30,7 +30,9 @@ pre {
     border-radius: .5em;
     box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.5);
     max-height: 20em;
+    min-height: 20em;
     max-width: 100%;
+    min-width: 100%;
     overflow-x: scroll;
     overflow-y: scroll;
     -webkit-transform-style: preserve-3d;
@@ -42,7 +44,13 @@ pre {
     text-decoration: none;
 }
 
-.tiddler img {
+img.icon {
+    float: right;
+    height: 2em;
+    padding-left: .5em;
+}
+
+.tcontent img {
     max-width: 100%;
 }
 
@@ -69,7 +77,7 @@ pre {
 }
 .left {
     opacity: 0.6;
-    -webkit-transform: rotateY(-15deg) translate3d(-16em, 0, -3em);
+    -webkit-transform: rotateY(-10deg) translate3d(-24em, 0, -3em);
 }
 
 .center {
@@ -79,7 +87,7 @@ pre {
 
 .right {
     opacity: 0.6;
-    -webkit-transform: rotateY(15deg) translate3d(16em, 0, -3em);
+    -webkit-transform: rotateY(10deg) translate3d(24em, 0, -3em);
 }
 
 .farright {

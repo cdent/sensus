@@ -2,6 +2,15 @@ var socketuri = 'http://tiddlyspace.com:8081';
 var currentIndex = 0;
 var news;
 
+var tiddlerTemplate = [
+    '<a href="{{spaceuri}}"><img class="space icon" src="{{spaceicon}}" alt="space"></a>',
+    '<a href="{{moduri}}"><img class="mod icon" src="{{modicon}}" alt="{{modifier}}"></a>',
+    '<h1><a href="{{uri}}">{{title}}</a></h1>',
+    '<h3 class="datetime">{{modified}}</h3>',
+    '<ul class="tags">{{#tags}}<li>{{.}}</li>{{/tags}}</ul>',
+    '<div class="tcontent">{{{content}}}</div>'].join("");
+
+
 var tiddlerURL = function(tiddler) {
     return 'http://tiddlyspace.com' + '/bags/'
         + encodeURIComponent(tiddler.bag) + '/tiddlers/'
@@ -9,59 +18,82 @@ var tiddlerURL = function(tiddler) {
         + '?render=1';
 }
 
+var urlFromUser = function(username) {
+    return 'http://' + username + '.tiddlyspace.com';
+}
+
+var urlFromBag = function(bag) {
+    var space = '';
+    var index = bag.indexOf('_public');
+    if (index >= 0) {
+        space = bag.substr(0, index) + '.';
+    }
+    return 'http://'
+        + space
+        + 'tiddlyspace.com';
+}
+
 var addNewTiddler = function(tiddler, klass) {
     $.ajax({
         dataType: 'json',
-        url: tiddlerURL(tiddler),
+        url: tiddler.uri + '?render=1',
         success: function(tiddler) {
-            var newTiddler = $('<div>');
-            var header = $('<h1>');
-            var link = $('<a>').attr({href: tiddler.uri,
-                title: tiddler.title,
-                target: '_blank'}).text(tiddler.title);
-            header.append(link).appendTo(newTiddler);
-            var content = $('<div>');
+            var content = '';
             if (tiddler.render) {
-                content.html(tiddler.render);
+                content = tiddler.render;
             } else if (tiddler.type && tiddler.type.match(/^text/)) {
-                var pre = $('<pre>').text(tiddler.text);
-                content.append(pre);
+                content = '<pre>'
+                    + $('<pre>').text(tiddler.text).html()
+                    + '</pre>';
             } else if (tiddler.type && tiddler.type.match(/^image/)) {
-                content.html('<img src="' + tiddler.uri + '">');
+                content = '<img src="' + tiddler.uri + '">';
             } else {
-                content.html('<p>Binary, click title</p>');
+                content = '<p>Binary, click title</p>';
             }
-            content.addClass('tcontent');
-            newTiddler.append(content);
+            $.extend(tiddler, {
+                spaceuri: urlFromBag(tiddler.bag),
+                spaceicon: urlFromBag(tiddler.bag) + '/SiteIcon',
+                moduri: urlFromUser(tiddler.modifier),
+                modicon: urlFromUser(tiddler.modifier) + '/SiteIcon',
+                content: content, 
+            });
+            html = Mustache.to_html(tiddlerTemplate, tiddler);
+            var newTiddler = $('<div>');
+            newTiddler.append(html);
             newTiddler.addClass('tiddler ' + klass);
             newTiddler.appendTo('#main');
         }
     });
 }
 
+var wipeUI = function() {
+    $.each(['farleft', 'left', 'center', 'right', 'farright'],
+            function(index, value) {
+                $('.' + value).remove()
+            });
+}
 
-var initUI = function() {
-    $('#message').text(currentIndex + ' ' + news.queue.length);
+var goHome = function() {
+    wipeUI();
     addNewTiddler(news.queue[0], 'center');
     addNewTiddler(news.queue[1], 'right');
     addNewTiddler(news.queue[2], 'farright');
+    currentIndex = 0;
+    $('#message').text(currentIndex + ' ' + news.queue.length);
 }
 
 var checkDisplay = function() {
-    $('#message').text(currentIndex + ' ' + news.queue.length);
     if (news.queue.length - currentIndex == 2) {
         addNewTiddler(news.queue[news.queue.length -1], 'right');
     } else if (news.queue.length - currentIndex == 3) {
         addNewTiddler(news.queue[currentIndex + 1], 'right');
         addNewTiddler(news.queue[currentIndex + 2], 'farright');
     }
+    $('#message').text(currentIndex + ' ' + news.queue.length);
 }
 
 var goEnd = function() {
-    $.each(['farleft', 'left', 'center', 'right', 'farright'],
-            function(index, value) {
-                $('.' + value).remove()
-            });
+    wipeUI();
     currentIndex = news.queue.length - 1;
     addNewTiddler(news.queue[currentIndex], 'center');
     addNewTiddler(news.queue[currentIndex - 1], 'left');
@@ -112,13 +144,17 @@ $(document).keydown(function(event) {
         event.stopPropagation();
         goLeft();
         return false;
-    } else if (event.which == 32) {
+    } else if (event.which == 69) {
         event.preventDefault();
         event.stopPropagation();
         goEnd();
         return false;
+    } else if (event.which == 72) {
+        event.preventDefault();
+        event.stopPropagation();
+        goHome();
+        return false;
     }
-
 });
 
 $.ajaxSetup({
@@ -166,7 +202,7 @@ $.extend(Tiddlers.prototype, {
                 $.each(tiddlers, function(index, tiddler) {
                     self.push(tiddler);
                 });
-                initUI();
+                goHome();
             }
         });
     },
@@ -187,7 +223,7 @@ var init = function() {
 
     news = new Tiddlers($('#main'),
             socketuri,
-            'http://tiddlyspace.com/search?q=_limit:99;sort=modified',
+            'http://tiddlyspace.com/search?q=_limit=99;sort=modified',
             ['*']);
     news.start();
 };
