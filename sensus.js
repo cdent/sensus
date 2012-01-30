@@ -144,6 +144,8 @@ $('.gohome').click(goHome);
 $('.goleft').click(goRight);
 $('.goright').click(goLeft);
 $('.goend').click(goEnd);
+$('.left').live('click', goRight);
+$('.right').live('click', goLeft);
 
 // keyup doesn't work here: screen scrolls
 // probably should use switch
