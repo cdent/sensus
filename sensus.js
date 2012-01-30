@@ -35,6 +35,7 @@ var urlFromBag = function(bag) {
 }
 
 var addNewTiddler = function(tiddler, klass) {
+    var spaceURL = urlFromBag(tiddler.bag)
     $.ajax({
         dataType: 'json',
         url: tiddlerURL(tiddler),
@@ -42,6 +43,13 @@ var addNewTiddler = function(tiddler, klass) {
             var content = '';
             if (tiddler.render) {
                 content = tiddler.render;
+                var proccont = $(content).find('a').attr('href',
+                    function(index, attribute) {
+                        if (!attribute.match(/\//)) {
+                            return spaceURL + '/' + attribute;
+                        }
+                    }).end();
+                content = proccont.html();
             } else if (tiddler.type && tiddler.type.match(/^text/)) {
                 content = '<pre>'
                     + $('<pre>').text(tiddler.text).html()
