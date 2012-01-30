@@ -18,6 +18,10 @@ pre {
     margin: 5em auto;
     -webkit-perspective: 800;
     -webkit-perspective-origin: 50% 7em; 
+    -moz-perspective: 800;
+    -moz-perspective-origin: 50% 7em; 
+    perspective: 800;
+    perspective-origin: 50% 7em; 
 }
 
 
@@ -37,6 +41,12 @@ pre {
     overflow-y: scroll;
     -webkit-transform-style: preserve-3d;
     -webkit-transition: -webkit-transform 1s, opacity 1s;
+    -moz-transform-style: preserve-3d;
+    -moz-transition: -moz-transform 1s, opacity 1s;
+    transform-style: preserve-3d;
+    transition: transform 1s, opacity 1s;
+    border-top: thin solid #ACA7FF;
+    border-left: thin solid #ACA7FF;
 }
 
 .tiddler a {
@@ -74,23 +84,33 @@ img.icon {
 .farleft {
     opacity: 0.5;
     -webkit-transform: rotateY(-30deg) translate3d(-48em, 0, -6em);
+    -moz-transform: rotateY(-30deg) translate3d(-48em, 0, -6em);
+    transform: rotateY(-30deg) translate3d(-48em, 0, -6em);
 }
 .left {
     opacity: 0.6;
     -webkit-transform: rotateY(-10deg) translate3d(-24em, 0, -3em);
+    -moz-transform: rotateY(-10deg) translate3d(-24em, 0, -3em);
+    transform: rotateY(-10deg) translate3d(-24em, 0, -3em);
 }
 
 .center {
     opacity: 1.0;
     -webkit-transform: rotateY(0deg);
+    -moz-transform: rotateY(0deg);
+    transform: rotateY(0deg);
 }
 
 .right {
     opacity: 0.6;
     -webkit-transform: rotateY(10deg) translate3d(24em, 0, -3em);
+    -moz-transform: rotateY(10deg) translate3d(24em, 0, -3em);
+    transform: rotateY(10deg) translate3d(24em, 0, -3em);
 }
 
 .farright {
     opacity: 0.5;
     -webkit-transform: rotateY(30deg) translate3d(48em, 0, -6em);
+    -moz-transform: rotateY(30deg) translate3d(48em, 0, -6em);
+    transform: rotateY(30deg) translate3d(48em, 0, -6em);
 }

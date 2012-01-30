@@ -2,6 +2,10 @@ var socketuri = 'http://tiddlyspace.com:8081';
 var currentIndex = 0;
 var news;
 
+var host = window.location.host
+    ? window.location.host.split('.').slice(1).join('.')
+    : 'tiddlyspace.com';
+
 var tiddlerTemplate = [
     '<a href="{{spaceuri}}"><img class="space icon" src="{{spaceicon}}" alt="space"></a>',
     '<a href="{{moduri}}"><img class="mod icon" src="{{modicon}}" alt="{{modifier}}"></a>',
@@ -12,14 +16,13 @@ var tiddlerTemplate = [
 
 
 var tiddlerURL = function(tiddler) {
-    return 'http://tiddlyspace.com' + '/bags/'
-        + encodeURIComponent(tiddler.bag) + '/tiddlers/'
+    return '/bags/' + encodeURIComponent(tiddler.bag) + '/tiddlers/'
         + encodeURIComponent(tiddler.title)
         + '?render=1';
 }
 
 var urlFromUser = function(username) {
-    return 'http://' + username + '.tiddlyspace.com';
+    return 'http://' + username + '.' + host;
 }
 
 var urlFromBag = function(bag) {
@@ -28,15 +31,13 @@ var urlFromBag = function(bag) {
     if (index >= 0) {
         space = bag.substr(0, index) + '.';
     }
-    return 'http://'
-        + space
-        + 'tiddlyspace.com';
+    return 'http://' + space + host;
 }
 
 var addNewTiddler = function(tiddler, klass) {
     $.ajax({
         dataType: 'json',
-        url: tiddler.uri + '?render=1',
+        url: tiddlerURL(tiddler),
         success: function(tiddler) {
             var content = '';
             if (tiddler.render) {
@@ -179,7 +180,7 @@ var Tiddlers = function(el, socketuri, sourceuri, updater) {
             self.socket.on('tiddler', function(data) {
                 $.ajax({
                     dataType: 'json',
-                    url: 'http://tiddlyspace.com' + data,
+                    url: data,
                     success: function(tiddler) {
                         self.push(tiddler);
                         checkDisplay();
@@ -208,7 +209,6 @@ $.extend(Tiddlers.prototype, {
     },
 
     push: function(tiddler) {
-        console.log('push', tiddler);
         this.queue.push(tiddler);
     },
 
@@ -221,10 +221,17 @@ var init = function() {
             .text('Unable to access socket server, functionality limited');
     }
 
+    var search = window.location.search
+        ? decodeURIComponent(window.location.search).replace(/^\?/, '').split('|')
+        : ['', '*'];
+    console.log('search', search);
+    var searchquery = search[0];
+    var subscription = search[1].split(',');
+    
     news = new Tiddlers($('#main'),
             socketuri,
-            'http://tiddlyspace.com/search?q=_limit=99;sort=modified',
-            ['*']);
+            '/search?q=' + searchquery + ' ' + '_limit:99;sort=modified',
+            subscription);
     news.start();
 };
 
