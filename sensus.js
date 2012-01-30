@@ -140,6 +140,11 @@ var goRight = function() {
     $('#message').text(currentIndex + ' ' + news.queue.length);
 }
 
+$('.gohome').click(goHome);
+$('.goleft').click(goRight);
+$('.goright').click(goLeft);
+$('.goend').click(goEnd);
+
 // keyup doesn't work here: screen scrolls
 // probably should use switch
 $(document).keydown(function(event) {

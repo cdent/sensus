@@ -1,6 +1,5 @@
 body {
     background: #F0F4F8;
-    min-height: 100%;
     font-family: "Helvetica Neue",helvetica,arial,sans-serif;
     line-height: 1.4;
 }
@@ -10,12 +9,26 @@ pre {
     font: 90% "Andale Mono", "Lucida Console", "Bitstream Vera Sans Mono", "Courier New", monospace;
 }
 
+#foot {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding: .5em;
+    background: black;
+    color: white;
+    text-align: center;
+}
+
+#foot li {
+    display: inline;
+    padding-right: 1em;
+}
 
 #main {
     position: relative;
     max-width: 50%;
-    min-height: 100%;
-    margin: 5em auto;
+    /* min-height: 100%; */
+    margin: 1em auto;
     -webkit-perspective: 800;
     -webkit-perspective-origin: 50% 7em; 
     -moz-perspective: 800;
@@ -24,6 +37,11 @@ pre {
     perspective-origin: 50% 7em; 
 }
 
+#controls {
+    text-align: center;
+    font-size: 200%;
+    margin: 1em auto;
+}
 
 .tiddler {
     position: absolute;
@@ -49,7 +67,7 @@ pre {
     border-left: thin solid #ACA7FF;
 }
 
-.tiddler a {
+a {
     color: #BC4378;
     text-decoration: none;
 }
